@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La REVUELTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --red: #c01c1c; --black: #0a0a0a; --cream: #f2ede4; --gray: #888; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--cream); font-family: 'Space Mono', monospace; overflow-x: hidden; }
+  .hero { position: relative; width: 100%; min-height: 100vh; background: var(--red); display: flex; flex-direction: column; justify-content: center; padding: 60px 48px; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.18'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 80px; height: 80px; background: white; border-bottom-right-radius: 80px; z-index: 2; }
+  .hero-content { position: relative; z-index: 3; max-width: 1100px; }
+  .logo-text { font-family: 'Anton', sans-serif; font-size: clamp(100px, 18vw, 220px); line-height: 0.9; color: var(--black); text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 40px; }
+  .hero-meta { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
+  .hero-tagline { font-family: 'Space Mono', monospace; font-size: 13px; line-height: 1.7; color: var(--black); opacity: 0.85; letter-spacing: 0.02em; }
+  .hero-byline { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--black); opacity: 0.6; margin-top: 8px; }
+  .scroll-hint { position: absolute; bottom: 32px; left: 48px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--black); opacity: 0.45; z-index: 3; }
+  section { padding: 80px 48px; max-width: 900px; margin: 0 auto; }
+  .section-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); font-weight: 700; margin-bottom: 20px; }
+  .what-text { font-family: 'Space Grotesk', sans-serif; font-size: clamp(18px, 2.5vw, 26px); line-height: 1.55; color: var(--cream); font-weight: 400; }
+  .what-text strong { color: white; font-weight: 700; }
+  .divider { height: 1px; background: #222; margin: 0 48px; width: calc(100% - 96px); }
+  .issue-block { padding: 80px 48px; max-width: 900px; margin: 0 auto; }
+  .issue-number { font-family: 'Anton', sans-serif; font-size: clamp(60px, 10vw, 120px); line-height: 0.9; color: #1a1a1a; letter-spacing: -0.01em; margin-bottom: 24px; -webkit-text-stroke: 1px #333; }
+  .issue-title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--cream); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .issue-subtitle { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--gray); margin-bottom: 28px; letter-spacing: 0.04em; }
+  .issue-description { font-family: 'Space Grotesk', sans-serif; font-size: 16px; line-height: 1.7; color: #aaa; max-width: 560px; margin-bottom: 32px; }
+  .issue-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); border: 1px solid #333; padding: 5px 10px; }
+  .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 48px; margin-top: 32px; }
+  @media (max-width: 640px) { .how-grid { grid-template-columns: 1fr; gap: 28px; } }
+  .how-item-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); font-weight: 700; margin-bottom: 8px; }
+  .how-item-text { font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.65; color: #999; }
+  .contact-block { padding: 80px 48px; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  .contact-headline { font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 3vw, 32px); font-weight: 700; color: var(--cream); line-height: 1.3; }
+  .contact-links { display: flex; flex-direction: column; gap: 12px; }
+  .contact-row { display: flex; gap: 16px; align-items: baseline; }
+  .contact-row-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); min-width: 80px; padding-top: 2px; }
+  .contact-row-value { font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: var(--cream); text-decoration: none; }
+  .contact-row-value:hover { color: var(--red); }
+  footer { border-top: 1px solid #1a1a1a; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-brand { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #444; }
+  .footer-brand span { color: var(--red); }
+  .footer-right { display: flex; gap: 20px; align-items: center; }
+  .footer-right a { font-size: 11px; color: #444; letter-spacing: 0.08em; text-decoration: none; }
+  .footer-right a:hover { color: var(--red); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 640px) { .field-grid { grid-template-columns: 1fr; } }
+  .field-card { border: 1px solid #1e1e1e; padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .field-card-meta { display: flex; justify-content: space-between; align-items: center; }
+  .field-location { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); font-weight: 700; }
+  .field-date { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #444; }
+  .field-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--cream); line-height: 1.2; }
+  .field-card-text { font-family: 'Space Grotesk', sans-serif; font-size: 14px; line-height: 1.65; color: #777; }
+  @media (max-width: 600px) { .hero { padding: 48px 28px; } section, .issue-block, .contact-block { padding: 60px 28px; } .divider { margin: 0 28px; width: calc(100% - 56px); } footer { padding: 28px; } .scroll-hint { left: 28px; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="logo-text">LA<br>REVUELTA</div>
+    <div class="hero-meta">
+      <div class="hero-tagline">
+        An independent, field-based documentation project<br>
+        exploring how resistance takes shape in everyday life —<br>
+        through culture, art, and lived experience.
+      </div>
+      <div class="hero-byline">By the people, for the people.</div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ Scroll</div>
+</div>
+
+<section>
+  <div class="section-label">What this is</div>
+  <div class="what-text">
+    La REVUELTA is an independent, bilingual documentary series produced through <strong>For The Culture NY</strong>.<br><br>
+    Each issue focuses on one city and one theme.<br><br>
+    Through field documentation, community conversations, and photography, each edition is developed in collaboration with local people and organizations. Published in <strong>English and Spanish</strong>, the work is returned to the communities it comes from.
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+  <div class="section-label">From the field</div>
+  <div style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(16px, 2vw, 20px); line-height: 1.75; color: #aaa; max-width: 640px;">
+    Resistance can take forms in so many ways — through activism, but also through culture, food, art, community, and simply life itself.<br><br>
+    While we live in a world filled with violence and fear, it's also important to pause, to see the beauty, and to hear the voices of communities that have come together and chosen to speak out — in both obvious and not so obvious ways.<br><br>
+    La REVUELTA documents those voices. People, communities, art, subcultures, and food that have chosen to participate in this movement in unique ways — as well as personal reflections from the field.<br><br>
+    So far: Guatemala and Mexico. More coming.
+  </div>
+  <div style="margin-top: 28px;">
+    <a href="https://instagram.com/fortheculture_ny" target="_blank" style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); text-decoration: none;">→ Follow on Instagram @fortheculture_ny</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="issue-block">
+  <div class="section-label">Current issue</div>
+  <div class="issue-number">01</div>
+  <div class="issue-title">Xela, Guatemala</div>
+  <div class="issue-subtitle">Youth &amp; Political Consciousness — Fieldwork in progress</div>
+  <div class="issue-description">
+    How does political awareness form among young people in Guatemala today? Theme still being determined through fieldwork and conversations.
+  </div>
+  <div class="issue-tags">
+    <div class="tag">Bilingual Zine</div>
+    <div class="tag">Field Documentation</div>
+    <div class="tag">Community Conversations</div>
+    <div class="tag">Photography</div>
+    <div class="tag">Quetzaltenango, Guatemala</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<section>
+  <div class="section-label">Approach / Methodology</div>
+  <div style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: #666; margin-bottom: 32px; line-height: 1.6;">The work is built through a field-based, relational process:</div>
+  <div class="how-grid">
+    <div class="how-item">
+      <div class="how-item-label">Go first</div>
+      <div class="how-item-text">Before any formal documentation, move through a place — make connections, learn in context what is alive and what matters. The theme emerges from that.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-item-label">Collaborate</div>
+      <div class="how-item-text">Every issue is made with a local collaborator — a person or organization embedded in the community. Their knowledge and relationships are what make the documentation accountable.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-item-label">Document</div>
+      <div class="how-item-text">Two rounds of conversations — one for understanding, one for documentation. Field observation, photography, desk research. Everything in Spanish.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-item-label">Return it</div>
+      <div class="how-item-text">The zine is bilingual and made for the communities in it. Not for outside audiences. The people who made it possible receive the output.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section style="max-width: 900px;">
+  <div class="section-label">Field notes from Xela, Guatemala</div>
+  <div style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: #666; margin-bottom: 36px; line-height: 1.6;">
+    Live documentation from the field — posted on <a href="https://instagram.com/fortheculture_ny" target="_blank" style="color: #888; text-decoration: none;">@fortheculture_ny</a> as the work happens.
+  </div>
+
+  <div class="field-grid">
+
+    <div class="field-card">
+      <div class="field-card-meta">
+        <span class="field-location">Xela, Guatemala</span>
+        <span class="field-date">March 2025</span>
+      </div>
+      <div class="field-card-title">Resistencia, Xela</div>
+      <div class="field-card-text">Underground scenes in Xela: live music, political tables, art, people asking hard questions about what resistance actually looks like.</div>
+    </div>
+
+    <div class="field-card">
+      <div class="field-card-meta">
+        <span class="field-location">Xela, Guatemala</span>
+        <span class="field-date">March 2025</span>
+      </div>
+      <div class="field-card-title">Women's March, Xela</div>
+      <div class="field-card-text">Was lucky to be in Xela on International Women's Day — March 8. Walked next to women and young girls from the center to the intercultural center. Signs reading "Es mi primera marcha." "Por las que lucharon y no fueron escuchadas."</div>
+    </div>
+
+    <div class="field-card">
+      <div class="field-card-meta">
+        <span class="field-location">Xela, Guatemala</span>
+        <span class="field-date">March 2025</span>
+      </div>
+      <div class="field-card-title">Trama Textil</div>
+      <div class="field-card-text">Met incredible women and their craft. So much skill, patience, and care in every step of the process — something really beautiful about sitting together, weaving side by side. Culture being kept alive, quietly, intentionally, as resistance.</div>
+    </div>
+
+    <div class="field-card">
+      <div class="field-card-meta">
+        <span class="field-location">San Cristóbal, Chiapas, Mexico</span>
+        <span class="field-date">March 2025</span>
+      </div>
+      <div class="field-card-title">Street Art, San Cristóbal</div>
+      <div class="field-card-text">Walls covered in murals and political graphics — a city that wears its voice publicly.</div>
+    </div>
+
+    <div class="field-card">
+      <div class="field-card-meta">
+        <span class="field-location">Oaxaca, Mexico</span>
+        <span class="field-date">March 2025</span>
+      </div>
+      <div class="field-card-title">Grabado, Oaxaca</div>
+      <div class="field-card-text">Printmaking is one of the most popular forms of art in Oaxaca City — you can see it everywhere. A huge connection between art and political resistance. More popular spaces exist in the center; smaller, more underground spaces exist for those who know where to look.</div>
+    </div>
+
+    <div class="field-card">
+      <div class="field-card-meta">
+        <span class="field-location">Oaxaca, Mexico</span>
+        <span class="field-date">March 2025</span>
+      </div>
+      <div class="field-card-title">Feminism y Grabado, Oaxaca</div>
+      <div class="field-card-text">Took a class on Social Movements through a local org and was connected with feminist printmakers in Oaxaca. Women here are doing powerful work — the kind that doesn't always show up in obvious ways.</div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 32px;">
+    <a href="https://instagram.com/fortheculture_ny" target="_blank" style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); text-decoration: none;">→ All field notes on Instagram</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="contact-block">
+  <div class="contact-headline">Want to collaborate,<br>contribute, or connect?</div>
+  <div class="contact-links">
+    <div class="contact-row">
+      <div class="contact-row-label">Instagram</div>
+      <a class="contact-row-value" href="https://instagram.com/fortheculture_ny" target="_blank">@fortheculture_ny</a>
+    </div>
+    <div class="contact-row">
+      <div class="contact-row-label">LinkedIn</div>
+      <a class="contact-row-value" href="https://www.linkedin.com/company/la-revueltany/" target="_blank">La REVUELTA</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">La <span>REVUELTA</span> — by Anjali Tallapragada</div>
+  <div class="footer-right">
+    <a href="https://instagram.com/fortheculture_ny" target="_blank">@fortheculture_ny</a>
+    <a href="https://www.linkedin.com/company/la-revueltany/" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>
